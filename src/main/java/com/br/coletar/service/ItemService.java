@@ -32,7 +32,6 @@ public class ItemService {
         File imageFile = new File(caminhoImagem+image);
         if (image != null || image.trim().length() >0){
             try{
-//                model.addAttribute("imagens",imagemRepository.findAll());
                 return Files.readAllBytes(imageFile.toPath());
             }catch(IOException ex){
                 ex.printStackTrace();

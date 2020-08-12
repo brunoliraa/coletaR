@@ -24,7 +24,7 @@ public class Point {
     private String state;
     private double latitude;
     private double longitude;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany
     @JoinTable(name = "point_item",joinColumns = @JoinColumn(name = "point_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "item_id",referencedColumnName ="id"))
     private List<Item> items;
