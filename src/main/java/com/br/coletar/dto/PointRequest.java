@@ -1,24 +1,18 @@
-package com.br.coletar.model;
+package com.br.coletar.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
-@Entity
-@Builder
-public class Point {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@AllArgsConstructor
+@NoArgsConstructor
+public class PointRequest {
+
     private Long id;
     @NotNull(message = "name is mandatory")
     @NotBlank(message = "name can't be blank")
@@ -30,10 +24,5 @@ public class Point {
     private String state;
     private double latitude;
     private double longitude;
-
-    @ManyToMany
-    @JoinTable(name = "point_item",joinColumns = @JoinColumn(name = "point_id",referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "item_id",referencedColumnName ="id"))
-    private List<Item> items;
-
+    private String itemsId;
 }
