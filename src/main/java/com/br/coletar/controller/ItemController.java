@@ -3,11 +3,10 @@ package com.br.coletar.controller;
 import com.br.coletar.model.Item;
 import com.br.coletar.service.ItemService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +27,16 @@ public class ItemController {
     @GetMapping("/item")
     public ResponseEntity<List<Item>> findAll(){
         return itemService.findAll();
+    }
+
+    @PostMapping("/item")
+    public ResponseEntity<Item> save(Item item, @RequestParam(value = "file") MultipartFile file){
+        return itemService.save(item, file);
+    }
+
+    @DeleteMapping("/item/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id){
+        return itemService.delete(id);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.br.coletar.service;
 
+import com.br.coletar.model.Item;
 import com.br.coletar.model.Point;
 import com.br.coletar.repository.PointRepository;
 import lombok.AllArgsConstructor;
@@ -23,9 +24,9 @@ public class UploadService {
 
     private final PointRepository pointRepository;
 
-    private static String uploadPath = "upload/";
+    private static String uploadPath = "uploads/";
 
-    public void save(Point point, MultipartFile image){
+    public void saveImageToPoint(Point point, MultipartFile image){
         try{
                 DateTimeFormatter dateTimeFormatter =DateTimeFormatter.ofPattern("ddMMyyyyHHmmss");
                 String data = LocalDateTime.now().format(dateTimeFormatter);
@@ -34,6 +35,22 @@ public class UploadService {
                 Path path = Paths.get(uploadPath+newFileName);
                 Files.write(path, bytes);
                 point.setImage(newFileName);
+
+        }catch(IOException ex){
+            ex.printStackTrace();
+        }
+
+    }
+
+    public void saveImageToItem(Item item, MultipartFile image){
+        try{
+            DateTimeFormatter dateTimeFormatter =DateTimeFormatter.ofPattern("ddMMyyyyHHmmss");
+            String data = LocalDateTime.now().format(dateTimeFormatter);
+            String newFileName = data+image.getOriginalFilename();
+            byte[] bytes = image.getBytes();
+            Path path = Paths.get(uploadPath+newFileName);
+            Files.write(path, bytes);
+            item.setImage(newFileName);
 
         }catch(IOException ex){
             ex.printStackTrace();
@@ -52,6 +69,21 @@ public class UploadService {
             }
         }
         return new byte[0];
+    }
+
+    public void deleteImage(String image){
+        try {
+            File file = new File(uploadPath+image);
+            if(file.delete()) {
+                System.out.println(file.getName() + " is deleted!");
+            } else {
+                System.out.println("Delete operation is failed.");
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println("Failed to Delete image !!");
+        }
     }
 
 }

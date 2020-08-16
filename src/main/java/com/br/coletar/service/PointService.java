@@ -56,7 +56,7 @@ public class PointService {
                 .items(items)
                 .build();
 
-        uploadService.save(point, file);
+        uploadService.saveImageToPoint(point, file);
        return new ResponseEntity<>(new Response<Point>(pointRepository.save(point))
                , HttpStatus.CREATED);
     }

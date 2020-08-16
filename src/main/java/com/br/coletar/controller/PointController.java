@@ -53,4 +53,5 @@ public class PointController {
 
         return pointService.updatePoint(id, point, result, file);
     }
+
 }
