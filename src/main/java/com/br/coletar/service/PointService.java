@@ -6,6 +6,7 @@ import com.br.coletar.exception.ItemNotFoundException;
 import com.br.coletar.exception.PointNotFoundException;
 import com.br.coletar.model.Item;
 import com.br.coletar.model.Point;
+import com.br.coletar.model.User;
 import com.br.coletar.repository.ItemRepository;
 import com.br.coletar.repository.PointRepository;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class PointService {
     private final PointRepository pointRepository;
     private final UploadService uploadService;
     private final ItemRepository itemRepository;
+    private final UserService userService;
 
     public ResponseEntity<Response<Point>> save(PointRequest pointRequest, BindingResult result, MultipartFile file){
 
@@ -45,6 +47,7 @@ public class PointService {
         itemsId.stream().forEach(item ->items.add( itemRepository.findById(item)
                 .orElseThrow(()-> new ItemNotFoundException("item "+ " not found"))));
 
+        User user = userService.getCurrentUser();
         Point point = Point.builder()
                 .name(pointRequest.getName())
                 .email(pointRequest.getEmail())
@@ -54,6 +57,7 @@ public class PointService {
                 .latitude(pointRequest.getLatitude())
                 .longitude(pointRequest.getLongitude())
                 .items(items)
+                .user(user)
                 .build();
 
         uploadService.saveImageToPoint(point, file);

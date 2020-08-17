@@ -7,12 +7,17 @@ import com.br.coletar.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -28,6 +33,7 @@ public class UserService {
             return ResponseEntity.badRequest().body(new Response<User>(errors) {
             });
         }
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 
         return new ResponseEntity<>(new Response<User>(userRepository.save(user))
                 , HttpStatus.CREATED);
@@ -56,5 +62,12 @@ public class UserService {
     public ResponseEntity<Response<User>> update(Long id, User user, BindingResult result ){
         user.setId(id);
         return this.save(user, result);
+    }
+
+    public User getCurrentUser() {
+        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.
+                getContext().getAuthentication().getPrincipal();
+        return userRepository.findUserByUserName(principal.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
     }
 }
