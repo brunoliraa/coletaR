@@ -21,12 +21,17 @@ public class UserDetailsServiceImp implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findUserByUserName(username)
+        User user = userRepository.findUserByUsername(username)
                 .orElseThrow(()-> new UserNotFoundException("user not found"));
 
-        Collection<GrantedAuthority> authorityListUser = AuthorityUtils.createAuthorityList("ROLE_USER");
-
-        return new org.springframework.security.core.userdetails.User
-                (user.getUserName(), user.getPassword(),authorityListUser);
+        return User.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .email(user.getEmail())
+                .points(user.getPoints())
+                .enabled(user.isEnabled())
+                .build();
     }
 }

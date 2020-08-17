@@ -1,5 +1,6 @@
 package com.br.coletar.service;
 
+import com.br.coletar.dto.LoginRequest;
 import com.br.coletar.dto.Response;
 import com.br.coletar.exception.UserNotFoundException;
 import com.br.coletar.model.User;
@@ -7,6 +8,8 @@ import com.br.coletar.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,6 +27,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final AuthenticationManager authenticationManager;
 
     public ResponseEntity<Response<User>> save(User user, BindingResult result){
 
@@ -34,7 +38,7 @@ public class UserService {
             });
         }
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-
+        user.setEnabled(true);
         return new ResponseEntity<>(new Response<User>(userRepository.save(user))
                 , HttpStatus.CREATED);
     }
@@ -65,9 +69,15 @@ public class UserService {
     }
 
     public User getCurrentUser() {
-        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.
+        User principal = (User) SecurityContextHolder.
                 getContext().getAuthentication().getPrincipal();
-        return userRepository.findUserByUserName(principal.getUsername())
+        return userRepository.findUserByUsername(principal.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
+    }
+
+    public void login(LoginRequest loginRequest) {
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+                loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
     }
 }

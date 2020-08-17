@@ -1,5 +1,6 @@
 package com.br.coletar.controller;
 
+import com.br.coletar.dto.LoginRequest;
 import com.br.coletar.dto.Response;
 
 import com.br.coletar.model.User;
@@ -43,5 +44,10 @@ public class UserController {
     public ResponseEntity<Response<User>> update(@Valid @RequestBody User user,@PathVariable Long id
             , BindingResult result){
         return userService.update(id, user, result);
+    }
+
+    @PostMapping("/login")
+    public void login(@RequestBody LoginRequest loginRequest) {
+       userService.login(loginRequest);
     }
 }
