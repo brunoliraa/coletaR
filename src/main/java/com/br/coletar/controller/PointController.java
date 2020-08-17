@@ -4,7 +4,6 @@ import com.br.coletar.dto.PointRequest;
 import com.br.coletar.dto.Response;
 import com.br.coletar.model.Point;
 import com.br.coletar.service.PointService;
-import com.br.coletar.service.UploadService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -12,10 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/point")

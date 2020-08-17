@@ -16,6 +16,7 @@ import java.util.List;
 @Data
 @Entity
 @Builder
+@Table(name = "point")
 public class Point {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,5 +36,9 @@ public class Point {
     @JoinTable(name = "point_item",joinColumns = @JoinColumn(name = "point_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "item_id",referencedColumnName ="id"))
     private List<Item> items;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }

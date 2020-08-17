@@ -43,11 +43,12 @@ public class ItemService {
     }
 
 
-    public byte[] showImage(@PathVariable String image){
-        itemRepository.findItemByImage(image).orElseThrow(
-                ()-> new IllegalArgumentException("image not found"));
+    public byte[] showImage(String image){
+//       Item item =  itemRepository.findItemByImage(image).orElseThrow(
+//                ()-> new IllegalArgumentException("image not found"));
 
         return uploadService.showImage(image);
+
 //        File imageFile = new File(caminhoImagem+image);
 //        if (image != null || image.trim().length() >0){
 //            try{
