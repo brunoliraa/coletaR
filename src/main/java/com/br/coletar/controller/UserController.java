@@ -6,6 +6,7 @@ import com.br.coletar.dto.Response;
 import com.br.coletar.model.User;
 import com.br.coletar.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -49,5 +50,11 @@ public class UserController {
     @PostMapping("/login")
     public void login(@RequestBody LoginRequest loginRequest) {
        userService.login(loginRequest);
+    }
+
+    @GetMapping("accountVerification/{token}")
+    public ResponseEntity<String> verifyAccount(@PathVariable String token){
+        userService.verifyAccount(token);
+        return new ResponseEntity<>("account activated sucessfully", HttpStatus.OK);
     }
 }
