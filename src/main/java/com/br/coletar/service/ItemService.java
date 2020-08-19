@@ -1,5 +1,6 @@
 package com.br.coletar.service;
 
+import com.br.coletar.dto.Response;
 import com.br.coletar.exception.ItemNotFoundException;
 import com.br.coletar.model.Item;
 import com.br.coletar.repository.ItemRepository;
@@ -40,6 +41,12 @@ public class ItemService {
         uploadService.deleteImage(item.getImage());
         itemRepository.delete(item);
         return ResponseEntity.ok("item deleted");
+    }
+
+    public ResponseEntity<Item> findById(Long id){
+        Item item = itemRepository.findById(id)
+                .orElseThrow(()-> new ItemNotFoundException("item "+id+" not found"));
+        return ResponseEntity.ok(item);
     }
 
 

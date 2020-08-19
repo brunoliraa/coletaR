@@ -30,10 +30,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/point/**").hasRole("USER")
-                .antMatchers("/api/v1/users")
+                .antMatchers(HttpMethod.POST,"/api/v1/points/**").hasRole("USER")
+                .antMatchers(HttpMethod.DELETE,"/api/v1/points/**").hasRole("USER")
+                .antMatchers(HttpMethod.PUT,"/api/v1/points/**").hasRole("USER")
+                .antMatchers(HttpMethod.PUT,"/api/v1/users/**").hasRole("USER")
+                .antMatchers(HttpMethod.DELETE,"/api/v1/users/**").hasRole("USER")
+                .antMatchers(HttpMethod.POST,"/api/v1/items/**").hasRole("USER")
+                .antMatchers(HttpMethod.DELETE,"/api/v1/items/**").hasRole("USER")
+                .antMatchers(HttpMethod.PUT,"/api/v1/items/**").hasRole("USER")
+                .antMatchers("/login")
                 .permitAll()
-                .anyRequest().permitAll();
+                .anyRequest()
+                .permitAll();
         http.cors();
     }
 

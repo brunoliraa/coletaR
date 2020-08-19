@@ -21,15 +21,15 @@ public class Point {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull(message = "name is mandatory")
-    @NotBlank(message = "name can't be blank")
     private String name;
-    private String email;
-    private String whatsapp;
     private String image;
+    @Column(nullable = false)
     private String city;
+    @Column(nullable = false)
     private String state;
+    @Column(nullable = false)
     private double latitude;
+    @Column(nullable = false)
     private double longitude;
 
     @ManyToMany

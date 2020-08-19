@@ -15,33 +15,33 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/users")
+
 @AllArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
+    @PostMapping("/api/v1/users")
     public ResponseEntity<Response<User>> save(@Valid @RequestBody User user, BindingResult result){
         return userService.save(user, result);
     }
 
-    @GetMapping
+    @GetMapping("/api/v1/users")
     public ResponseEntity<List<User>> findAll(){
         return userService.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/api/v1/users/{id}")
     public ResponseEntity<User> findById(@PathVariable Long id){
         return userService.findById(id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/api/v1/users/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         return userService.delete(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/api/v1/users/{id}")
     public ResponseEntity<Response<User>> update(@Valid @RequestBody User user,@PathVariable Long id
             , BindingResult result){
         return userService.update(id, user, result);
@@ -52,7 +52,7 @@ public class UserController {
        userService.login(loginRequest);
     }
 
-    @GetMapping("accountVerification/{token}")
+    @GetMapping("/api/v1/users/accountVerification/{token}")
     public ResponseEntity<String> verifyAccount(@PathVariable String token){
         userService.verifyAccount(token);
         return new ResponseEntity<>("account activated sucessfully", HttpStatus.OK);

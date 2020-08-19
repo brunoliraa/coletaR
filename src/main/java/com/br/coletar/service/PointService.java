@@ -50,8 +50,6 @@ public class PointService {
         User user = userService.getCurrentUser();
         Point point = Point.builder()
                 .name(pointRequest.getName())
-                .email(pointRequest.getEmail())
-                .whatsapp(pointRequest.getWhatsapp())
                 .city(pointRequest.getCity())
                 .state(pointRequest.getState())
                 .latitude(pointRequest.getLatitude())

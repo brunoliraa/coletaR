@@ -16,7 +16,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/point")
+@RequestMapping("/api/v1/points")
 @AllArgsConstructor
 public class PointController {
 

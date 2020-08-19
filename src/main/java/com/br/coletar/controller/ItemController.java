@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/api/v1")
 public class ItemController {
 
     private final ItemService itemService;
@@ -24,19 +25,24 @@ public class ItemController {
         return itemService.showImage(image);
     }
 
-    @GetMapping("/item")
+    @GetMapping("/items")
     public ResponseEntity<List<Item>> findAll(){
         return itemService.findAll();
     }
 
-    @PostMapping("/item")
+    @PostMapping("/items")
     public ResponseEntity<Item> save(Item item, @RequestParam(value = "file") MultipartFile file){
         return itemService.save(item, file);
     }
 
-    @DeleteMapping("/item/{id}")
+    @DeleteMapping("/items/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         return itemService.delete(id);
+    }
+
+    @GetMapping("/items/{id}")
+    public ResponseEntity<Item> findById(@PathVariable Long id){
+        return itemService.findById(id);
     }
 
 }
