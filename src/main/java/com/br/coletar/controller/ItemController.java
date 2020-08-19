@@ -20,7 +20,7 @@ public class ItemController {
 
     private final ItemService itemService;
 
-    @GetMapping("/uploads/{image}")
+    @GetMapping("/uploads/{image:.+}")
     public byte[] showImage(@PathVariable String image) {
         return itemService.showImage(image);
     }

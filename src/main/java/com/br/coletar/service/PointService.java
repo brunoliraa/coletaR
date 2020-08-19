@@ -49,6 +49,7 @@ public class PointService {
 
         User user = userService.getCurrentUser();
         Point point = Point.builder()
+                .id(pointRequest.getId())
                 .name(pointRequest.getName())
                 .city(pointRequest.getCity())
                 .state(pointRequest.getState())

@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -44,12 +43,12 @@ public class UserService {
             });
         }
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        user.setEnabled(true);
+
         userRepository.save(user);
-//        String token = criarTokenVerificacao(user);
-//
-//        emailService.sendMail(new Email("confirmação de cadastro coletaR", user.getEmail()
-//                ,"obrigado por se cadastrar, clique no link para ativar a sua conta "+ "http://localhost:8080/api/v1/users/accountVerification/"+token));
+        String token = criarTokenVerificacao(user);
+
+        emailService.sendMail(new Email("confirmação de cadastro coletaR", user.getEmail()
+                ,"obrigado por se cadastrar, clique no link para ativar a sua conta "+ "http://localhost:8080/api/v1/users/accountVerification/"+token));
 
         return new ResponseEntity<>(new Response<User>(user)
                 , HttpStatus.CREATED);
@@ -108,24 +107,14 @@ public class UserService {
     }
 
 
-//    public String criarTokenVerificacao(User user){
-//        String token = UUID.randomUUID().toString();
-//        VerificationToken verificationToken = new VerificationToken();
-//        verificationToken.setId(UUID.randomUUID().toString());
-//        verificationToken.setToken(token);
-//        verificationToken.setUserId(user.getId());
-//        verificationTokenRepositoryImp.save(verificationToken);
-//        return token;
-//    }
+    public String criarTokenVerificacao(User user){
+        String token = UUID.randomUUID().toString();
+        VerificationToken verificationToken = new VerificationToken();
+        verificationToken.setId(UUID.randomUUID().toString());
+        verificationToken.setToken(token);
+        verificationToken.setUserId(user.getId());
+        verificationTokenRepositoryImp.save(verificationToken);
+        return token;
+    }
 
-//    @PostConstruct
-//    public void teste(){
-//        Long id = verificationTokenRepositoryImp.findByToken("5ba18257-397e-406b-b35a-bf5e368a18fa");
-//        System.out.println(id);
-//    }
-
-//    @PostConstruct
-//    public void all(){
-//        System.out.println(verificationTokenRepositoryImp.findAll());
-//    }
 }
