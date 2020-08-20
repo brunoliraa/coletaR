@@ -5,6 +5,7 @@ import com.br.coletar.dto.Response;
 
 import com.br.coletar.model.User;
 import com.br.coletar.service.UserService;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
