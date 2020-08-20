@@ -28,30 +28,30 @@ import org.springframework.web.context.WebApplicationContext;
 @AutoConfigureMockMvc(addFilters = false)
 public class UserControllerTest {
 
-    @Autowired
-    private UserController userController;
-
-    @MockBean
-    private UserService userServiceMock;
-
-    @BeforeEach
-    public void setup() {
-        standaloneSetup(this.userController);
-    }
-
-
-    @Test
-    public void returnSuccess_whenSeachForAUser(){
-
-        when(userServiceMock.findById(1L))
-                .thenReturn(ResponseEntity.ok(User.builder().id(1L).name("regular user").build()));
-
-        given()
-                .accept(ContentType.JSON)
-                .when()
-                .get("/api/v1/users/{id}", 1)
-                .then()
-                .statusCode(HttpStatus.OK.value());
-    }
+//    @Autowired
+//    private UserController userController;
+//
+//    @MockBean
+//    private UserService userServiceMock;
+//
+//    @BeforeEach
+//    public void setup() {
+//        standaloneSetup(this.userController);
+//    }
+//
+//
+//    @Test
+//    public void returnSuccess_whenSeachForAUser(){
+//
+//        when(userServiceMock.findById(1L))
+//                .thenReturn(ResponseEntity.ok(User.builder().id(1L).name("regular user").build()));
+//
+//        given()
+//                .accept(ContentType.JSON)
+//                .when()
+//                .get("/api/v1/users/{id}", 1)
+//                .then()
+//                .statusCode(HttpStatus.OK.value());
+//    }
 
 }
