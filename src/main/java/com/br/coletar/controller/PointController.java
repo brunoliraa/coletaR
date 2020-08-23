@@ -41,7 +41,7 @@ public class PointController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePoint(@PathVariable Long id){
+    public ResponseEntity<Void> deletePoint(@PathVariable Long id){
        return pointService.deletePoint(id);
     }
 

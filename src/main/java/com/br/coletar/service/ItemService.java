@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,17 +31,18 @@ public class ItemService {
         return ResponseEntity.ok(itemRepository.findAll());
     }
 
+    @Transactional
     public ResponseEntity<Item> save(Item item, MultipartFile file){
         uploadService.saveImageToItem(item, file);
         return new ResponseEntity<>(itemRepository.save(item), HttpStatus.CREATED);
     }
 
-    public ResponseEntity<String> delete(Long id){
+    public ResponseEntity<Void> delete(Long id){
         Item item = itemRepository.findById(id)
                 .orElseThrow(()-> new ItemNotFoundException("item "+id+" not found"));
         uploadService.deleteImage(item.getImage());
         itemRepository.delete(item);
-        return ResponseEntity.ok("item deleted");
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     public ResponseEntity<Item> findById(Long id){

@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +32,7 @@ public class PointService {
     private final ItemRepository itemRepository;
     private final UserService userService;
 
+    @Transactional
     public ResponseEntity<Response<Point>> save(PointRequest pointRequest, BindingResult result, MultipartFile file){
 
         if(result.hasErrors()){
@@ -81,11 +83,12 @@ public class PointService {
                 .orElseThrow(()-> new PointNotFoundException("point with id "+ id+ " not found")));
     }
 
-    public ResponseEntity<String> deletePoint(Long id){
+    public ResponseEntity<Void> deletePoint(Long id){
         Point point = pointRepository.findById(id)
                 .orElseThrow(()-> new PointNotFoundException("point with id "+ id+ " not found"));
+        uploadService.deleteImage(point.getImage());
         pointRepository.delete(point);
-        return new ResponseEntity<>("point "+id + " success deleted", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     public ResponseEntity<Response<Point>> updatePoint(Long id, PointRequest point, BindingResult result, MultipartFile file){

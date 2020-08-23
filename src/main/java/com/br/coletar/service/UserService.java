@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
 
@@ -34,8 +35,8 @@ public class UserService {
     private final EmailService emailService;
     private final VerificationTokenRepositoryImp verificationTokenRepositoryImp;
 
+    @Transactional
     public ResponseEntity<Response<User>> save(User user, BindingResult result){
-
         if(result.hasErrors()){
             List<String> errors = new ArrayList<>();
             result.getAllErrors().forEach(error -> errors.add(error.getDefaultMessage()));
@@ -67,11 +68,11 @@ public class UserService {
 
     }
 
-    public ResponseEntity<String> delete(Long id){
+    public ResponseEntity<Void> delete(Long id){
         User user = userRepository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException("user with id "+ id+ " not found"));
         userRepository.delete(user);
-        return new ResponseEntity<>("point "+id + " success deleted", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     public ResponseEntity<Response<User>> update(Long id, User user, BindingResult result ){
