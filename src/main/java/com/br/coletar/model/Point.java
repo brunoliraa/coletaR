@@ -33,8 +33,8 @@ public class Point {
     private double longitude;
 
     @ManyToMany
-    @JoinTable(name = "point_item",joinColumns = @JoinColumn(name = "point_id",referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "item_id",referencedColumnName ="id"))
+    @JoinTable(name = "point_item", joinColumns = @JoinColumn(name = "point_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))
     private List<Item> items;
 
     @ManyToOne

@@ -36,48 +36,43 @@ public class UserService {
     private final VerificationTokenRepositoryImp verificationTokenRepositoryImp;
 
     @Transactional
-    public ResponseEntity<Response<User>> save(User user, BindingResult result){
-        if(result.hasErrors()){
+    public Response<User> save(User user, BindingResult result) {
+        if (result.hasErrors()) {
             List<String> errors = new ArrayList<>();
             result.getAllErrors().forEach(error -> errors.add(error.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(new Response<User>(errors) {
-            });
+            return new Response<User>(errors) {
+            };
         }
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         userRepository.save(user);
         String token = criarTokenVerificacao(user);
 
         emailService.sendMail(new Email("confirmação de cadastro coletaR", user.getEmail()
-                ,"obrigado por se cadastrar, clique no link para ativar a sua conta "+ "http://localhost:8080/api/v1/users/accountVerification/"+token));
+                , "obrigado por se cadastrar, clique no link para ativar a sua conta " + "http://localhost:8080/api/v1/users/accountVerification/" + token));
 
-        return new ResponseEntity<>(new Response<User>(user)
-                , HttpStatus.CREATED);
+        return new Response<User>(user);
     }
 
-    public ResponseEntity<List<User>> findAll(){
-        if(userRepository.findAll().isEmpty()){
-            return new ResponseEntity<>(userRepository.findAll(), HttpStatus.NO_CONTENT);
-        }
-        return ResponseEntity.ok(userRepository.findAll());
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
-    public ResponseEntity<User> findById(Long id){
-        return ResponseEntity.ok(userRepository.findById(id)
-                .orElseThrow(()-> new UserNotFoundException("user with id "+ id+ " not found")));
+    public User findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("user with id " + id + " not found"));
 
     }
 
-    public ResponseEntity<Void> delete(Long id){
+    public void delete(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(()-> new UserNotFoundException("user with id "+ id+ " not found"));
+                .orElseThrow(() -> new UserNotFoundException("user with id " + id + " not found"));
         userRepository.delete(user);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    public ResponseEntity<Response<User>> update(Long id, User user, BindingResult result ){
+    public Response<User> update(Long id, User user, BindingResult result) {
         user.setId(id);
-        return this.save(user, result);
+        return save(user,result);
     }
 
     public User getCurrentUser() {
@@ -95,20 +90,20 @@ public class UserService {
 
     public void verifyAccount(String token) {
         Long userId = verificationTokenRepositoryImp.findByToken(token);
-        if(userId==null){
+        if (userId == null) {
             throw new ColetarException("token invalid");
         }
         fetchUserAndEnable(userId);
     }
 
     private void fetchUserAndEnable(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User "+userId+ " not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User " + userId + " not found"));
         user.setEnabled(true);
         userRepository.save(user);
     }
 
 
-    public String criarTokenVerificacao(User user){
+    public String criarTokenVerificacao(User user) {
         String token = UUID.randomUUID().toString();
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setId(UUID.randomUUID().toString());

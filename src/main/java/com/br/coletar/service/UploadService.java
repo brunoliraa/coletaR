@@ -27,62 +27,60 @@ public class UploadService {
 
     private static String uploadPath = "uploads/";
 
-    public void saveImageToPoint(Point point, MultipartFile image){
-        try{
-                DateTimeFormatter dateTimeFormatter =DateTimeFormatter.ofPattern("ddMMyyyyHHmmss");
-                String data = LocalDateTime.now().format(dateTimeFormatter);
-                String newFileName = data+image.getOriginalFilename();
-                byte[] bytes = image.getBytes();
-                Path path = Paths.get(uploadPath+newFileName);
-                Files.write(path, bytes);
-                point.setImage(newFileName);
+    public void saveImageToPoint(Point point, MultipartFile image) {
+        try {
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("ddMMyyyyHHmmss");
+            String data = LocalDateTime.now().format(dateTimeFormatter);
+            String newFileName = data + image.getOriginalFilename();
+            byte[] bytes = image.getBytes();
+            Path path = Paths.get(uploadPath + newFileName);
+            Files.write(path, bytes);
+            point.setImage(newFileName);
 
-        }catch(IOException ex){
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
 
     }
 
-    public void saveImageToItem(Item item, MultipartFile image){
-        try{
-            DateTimeFormatter dateTimeFormatter =DateTimeFormatter.ofPattern("ddMMyyyyHHmmss");
+    public void saveImageToItem(Item item, MultipartFile image) {
+        try {
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("ddMMyyyyHHmmss");
             String data = LocalDateTime.now().format(dateTimeFormatter);
-            String newFileName = data+image.getOriginalFilename();
+            String newFileName = data + image.getOriginalFilename();
             byte[] bytes = image.getBytes();
-            Path path = Paths.get(uploadPath+newFileName);
+            Path path = Paths.get(uploadPath + newFileName);
             Files.write(path, bytes);
             item.setImage(newFileName);
 
-        }catch(IOException ex){
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
 
     }
 
 
-    public byte[] showImage(String image){
-        File imagemArquivo = new File(uploadPath+image);
-        if (image != null || image.trim().length() >0){
-            try{
+    public byte[] showImage(String image) {
+        File imagemArquivo = new File(uploadPath + image);
+        if (image != null || image.trim().length() > 0) {
+            try {
                 return Files.readAllBytes(imagemArquivo.toPath());
-            }catch(IOException ex){
+            } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
         return new byte[0];
     }
 
-    public void deleteImage(String image){
+    public void deleteImage(String image) {
         try {
-            File file = new File(uploadPath+image);
-            if(file.delete()) {
+            File file = new File(uploadPath + image);
+            if (file.delete()) {
                 System.out.println(file.getName() + " is deleted!");
             } else {
                 System.out.println("Delete operation is failed.");
             }
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("Failed to Delete image !!");
         }
     }

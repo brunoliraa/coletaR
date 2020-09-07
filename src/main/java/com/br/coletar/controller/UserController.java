@@ -23,38 +23,51 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/api/v1/users")
-    public ResponseEntity<Response<User>> save(@Valid @RequestBody User user, BindingResult result){
-        return userService.save(user, result);
+    public ResponseEntity<Response<User>> save(@Valid @RequestBody User user, BindingResult result) {
+        Response<User> userResponse = userService.save(user, result);
+        if (userResponse.getErrors()!=null){
+            return new ResponseEntity<>(userResponse,HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.ok(userResponse);
+
     }
 
     @GetMapping("/api/v1/users")
-    public ResponseEntity<List<User>> findAll(){
-        return userService.findAll();
+    public ResponseEntity<List<User>> findAll() {
+        if(userService.findAll().isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return ResponseEntity.ok(userService.findAll());
     }
 
     @GetMapping("/api/v1/users/{id}")
-    public ResponseEntity<User> findById(@PathVariable Long id){
-        return userService.findById(id);
+    public ResponseEntity<User> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.findById(id));
     }
 
     @DeleteMapping("/api/v1/users/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
-        return userService.delete(id);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        userService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/api/v1/users/{id}")
-    public ResponseEntity<Response<User>> update(@Valid @RequestBody User user,@PathVariable Long id
-            , BindingResult result){
-        return userService.update(id, user, result);
+    public ResponseEntity<Response<User>> update(@Valid @RequestBody User user, @PathVariable Long id
+            , BindingResult result) {
+        Response<User> userResponse= userService.update(id, user, result);
+        if (userResponse.getErrors()!=null){
+            return new ResponseEntity<>(userResponse,HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/login")
     public void login(@RequestBody LoginRequest loginRequest) {
-       userService.login(loginRequest);
+        userService.login(loginRequest);
     }
 
     @GetMapping("/api/v1/users/accountVerification/{token}")
-    public ResponseEntity<String> verifyAccount(@PathVariable String token){
+    public ResponseEntity<String> verifyAccount(@PathVariable String token) {
         userService.verifyAccount(token);
         return new ResponseEntity<>("account activated sucessfully", HttpStatus.OK);
     }

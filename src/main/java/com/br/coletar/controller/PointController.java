@@ -24,30 +24,30 @@ public class PointController {
 
 
     @PostMapping
-    public ResponseEntity<Response<Point>> save (@Valid PointRequest point, BindingResult result
-            , @RequestParam(value = "file") MultipartFile file){
+    public ResponseEntity<Response<Point>> save(@Valid PointRequest point, BindingResult result
+            , @RequestParam(value = "file") MultipartFile file) {
 
         return pointService.save(point, result, file);
     }
 
     @GetMapping
-    public ResponseEntity<List<Point>> findAll(@RequestParam(required = false) String city, @RequestParam(required = false) String state ){
+    public ResponseEntity<List<Point>> findAll(@RequestParam(required = false) String city, @RequestParam(required = false) String state) {
         return pointService.findAll(city, state);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Point> findById(@PathVariable Long id){
+    public ResponseEntity<Point> findById(@PathVariable Long id) {
         return pointService.findById(id);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePoint(@PathVariable Long id){
-       return pointService.deletePoint(id);
+    public ResponseEntity<Void> deletePoint(@PathVariable Long id) {
+        return pointService.deletePoint(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Response<Point>> updatePoint (@Valid PointRequest point,@PathVariable Long id
-            , BindingResult result, @RequestParam("file") MultipartFile file){
+    public ResponseEntity<Response<Point>> updatePoint(@Valid PointRequest point, @PathVariable Long id
+            , BindingResult result, @RequestParam("file") MultipartFile file) {
 
         return pointService.updatePoint(id, point, result, file);
     }

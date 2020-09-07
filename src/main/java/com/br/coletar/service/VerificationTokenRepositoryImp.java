@@ -16,15 +16,15 @@ public class VerificationTokenRepositoryImp implements VerificationTokenReposito
 
     private HashOperations hashOperations;
 
-    public VerificationTokenRepositoryImp(RedisTemplate<String, VerificationToken> redisTemplate){
-        this.redisTemplate=redisTemplate;
+    public VerificationTokenRepositoryImp(RedisTemplate<String, VerificationToken> redisTemplate) {
+        this.redisTemplate = redisTemplate;
 
         hashOperations = redisTemplate.opsForHash();
     }
 
     @Override
     public void save(VerificationToken verificationToken) {
-        hashOperations.put("verificationToken", verificationToken.getToken(),verificationToken.getUserId());
+        hashOperations.put("verificationToken", verificationToken.getToken(), verificationToken.getUserId());
     }
 
     @Override

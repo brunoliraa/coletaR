@@ -27,32 +27,32 @@ public class ItemService {
     private static String caminhoImagem = "uploads/";
 
 
-    public ResponseEntity<List<Item>> findAll(){
+    public ResponseEntity<List<Item>> findAll() {
         return ResponseEntity.ok(itemRepository.findAll());
     }
 
     @Transactional
-    public ResponseEntity<Item> save(Item item, MultipartFile file){
+    public ResponseEntity<Item> save(Item item, MultipartFile file) {
         uploadService.saveImageToItem(item, file);
         return new ResponseEntity<>(itemRepository.save(item), HttpStatus.CREATED);
     }
 
-    public ResponseEntity<Void> delete(Long id){
+    public ResponseEntity<Void> delete(Long id) {
         Item item = itemRepository.findById(id)
-                .orElseThrow(()-> new ItemNotFoundException("item "+id+" not found"));
+                .orElseThrow(() -> new ItemNotFoundException("item " + id + " not found"));
         uploadService.deleteImage(item.getImage());
         itemRepository.delete(item);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    public ResponseEntity<Item> findById(Long id){
+    public ResponseEntity<Item> findById(Long id) {
         Item item = itemRepository.findById(id)
-                .orElseThrow(()-> new ItemNotFoundException("item "+id+" not found"));
+                .orElseThrow(() -> new ItemNotFoundException("item " + id + " not found"));
         return ResponseEntity.ok(item);
     }
 
 
-    public byte[] showImage(String image){
+    public byte[] showImage(String image) {
 //       Item item =  itemRepository.findItemByImage(image).orElseThrow(
 //                ()-> new IllegalArgumentException("image not found"));
 

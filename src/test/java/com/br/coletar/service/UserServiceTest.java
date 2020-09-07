@@ -19,10 +19,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.assertj.core.api.Assertions;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(SpringExtension.class)
 class UserServiceTest {
@@ -36,6 +39,8 @@ class UserServiceTest {
     @Mock
     private EmailService emailServiceMock;
 
+    final UserService mockService= mock(UserService.class);
+
     @BeforeEach
     public void setUp() {
         List<User> produtos = Arrays.asList(UserCreator.createValdiUser());
@@ -47,6 +52,8 @@ class UserServiceTest {
         BDDMockito.when(userRepositoryMock.findById(ArgumentMatchers.anyLong()))
                 .thenReturn(Optional.ofNullable(UserCreator.createValdiUser()));
         BDDMockito.doNothing().when(userRepositoryMock).delete(ArgumentMatchers.any(User.class));
+        BDDMockito.when(mockService.criarTokenVerificacao(ArgumentMatchers.any(User.class)))
+                .thenReturn(ArgumentMatchers.anyString());
 
 
 //        String token =Mockito.spy(userService.criarTokenVerificacao(UserCreator.createUserToSave()));
@@ -60,7 +67,7 @@ class UserServiceTest {
 
         String expectedName = UserCreator.createValdiUser().getName();
 
-        List<User> users = userService.findAll().getBody();
+        List<User> users = userService.findAll();
 
         Assertions.assertThat(users).isNotNull();
         Assertions.assertThat(!users.isEmpty());
@@ -89,7 +96,7 @@ class UserServiceTest {
 
         User user = UserCreator.createValdiUser();
 
-        User userSaved =userService.findById(1L).getBody();
+        User userSaved =userService.findById(1L);
 
         Assertions.assertThat(userSaved).isNotNull();
         Assertions.assertThat(userSaved.getId()).isNotNull();
@@ -126,9 +133,6 @@ class UserServiceTest {
         Assertions.assertThatExceptionOfType(UserNotFoundException.class)
                 .isThrownBy(() ->userService.delete(2L));
     }
-
-
-
 
 
 }

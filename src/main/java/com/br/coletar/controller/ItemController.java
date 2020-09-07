@@ -26,22 +26,22 @@ public class ItemController {
     }
 
     @GetMapping("/items")
-    public ResponseEntity<List<Item>> findAll(){
+    public ResponseEntity<List<Item>> findAll() {
         return itemService.findAll();
     }
 
     @PostMapping("/items")
-    public ResponseEntity<Item> save(Item item, @RequestParam(value = "file") MultipartFile file){
+    public ResponseEntity<Item> save(Item item, @RequestParam(value = "file") MultipartFile file) {
         return itemService.save(item, file);
     }
 
     @DeleteMapping("/items/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         return itemService.delete(id);
     }
 
     @GetMapping("/items/{id}")
-    public ResponseEntity<Item> findById(@PathVariable Long id){
+    public ResponseEntity<Item> findById(@PathVariable Long id) {
         return itemService.findById(id);
     }
 

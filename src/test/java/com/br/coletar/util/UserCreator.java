@@ -5,7 +5,7 @@ import com.br.coletar.model.User;
 
 public class UserCreator {
 
-    public static User createUserToSave(){
+    public static User createUserToSave() {
         return User.builder()
                 .name("user")
                 .username("user")
@@ -13,16 +13,17 @@ public class UserCreator {
                 .email("user@email.com").build();
     }
 
-    public static User createValdiUser(){
+    public static User createValdiUser() {
         return User.builder()
                 .id(1L)
                 .name("user")
                 .username("user")
                 .password("user")
-                .email("user@email.com").build();
+                .email("user@email.com")
+                .authorities("ROLE_USER").build();
     }
 
-    public static User createUserToUpdate(){
+    public static User createUserToUpdate() {
         return User.builder()
                 .id(1L)
                 .name("user updated")
@@ -31,7 +32,7 @@ public class UserCreator {
                 .email("user@email.com").build();
     }
 
-    public static Email createEmail(){
+    public static Email createEmail() {
         return new Email("teste", "user@email.com", "testando");
     }
 }

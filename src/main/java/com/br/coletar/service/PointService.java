@@ -33,9 +33,9 @@ public class PointService {
     private final UserService userService;
 
     @Transactional
-    public ResponseEntity<Response<Point>> save(PointRequest pointRequest, BindingResult result, MultipartFile file){
+    public ResponseEntity<Response<Point>> save(PointRequest pointRequest, BindingResult result, MultipartFile file) {
 
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             List<String> errors = new ArrayList<>();
             result.getAllErrors().forEach(error -> errors.add(error.getDefaultMessage()));
             return ResponseEntity.badRequest().body(new Response<Point>(errors) {
@@ -43,11 +43,11 @@ public class PointService {
         }
 
         List<Long> itemsId = Arrays.stream(pointRequest.getItemsId().split(","))
-                .map(item ->Long.parseLong(item.trim())).collect(Collectors.toList());
+                .map(item -> Long.parseLong(item.trim())).collect(Collectors.toList());
 
         List<Item> items = new ArrayList<>();
-        itemsId.stream().forEach(item ->items.add( itemRepository.findById(item)
-                .orElseThrow(()-> new ItemNotFoundException("item "+ " not found"))));
+        itemsId.stream().forEach(item -> items.add(itemRepository.findById(item)
+                .orElseThrow(() -> new ItemNotFoundException("item " + " not found"))));
 
         User user = userService.getCurrentUser();
         Point point = Point.builder()
@@ -62,36 +62,36 @@ public class PointService {
                 .build();
 
         uploadService.saveImageToPoint(point, file);
-       return new ResponseEntity<>(new Response<Point>(pointRepository.save(point))
-               , HttpStatus.CREATED);
+        return new ResponseEntity<>(new Response<Point>(pointRepository.save(point))
+                , HttpStatus.CREATED);
     }
 
-    public ResponseEntity<List<Point>> findAll(String city, String state){
+    public ResponseEntity<List<Point>> findAll(String city, String state) {
         //pega as string separadas por virgula
 //        List<String> items = Arrays.stream(state.split(","))
 //                .map(item -> item.trim()).collect(Collectors.toList());
 
-        if(pointRepository.findAll().isEmpty()){
+        if (pointRepository.findAll().isEmpty()) {
             return new ResponseEntity(pointRepository.findAll(), HttpStatus.NO_CONTENT);
         }
 
         return ResponseEntity.ok(pointRepository.findAll());
     }
 
-    public ResponseEntity<Point> findById(Long id){
+    public ResponseEntity<Point> findById(Long id) {
         return ResponseEntity.ok(pointRepository.findById(id)
-                .orElseThrow(()-> new PointNotFoundException("point with id "+ id+ " not found")));
+                .orElseThrow(() -> new PointNotFoundException("point with id " + id + " not found")));
     }
 
-    public ResponseEntity<Void> deletePoint(Long id){
+    public ResponseEntity<Void> deletePoint(Long id) {
         Point point = pointRepository.findById(id)
-                .orElseThrow(()-> new PointNotFoundException("point with id "+ id+ " not found"));
+                .orElseThrow(() -> new PointNotFoundException("point with id " + id + " not found"));
         uploadService.deleteImage(point.getImage());
         pointRepository.delete(point);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    public ResponseEntity<Response<Point>> updatePoint(Long id, PointRequest point, BindingResult result, MultipartFile file){
+    public ResponseEntity<Response<Point>> updatePoint(Long id, PointRequest point, BindingResult result, MultipartFile file) {
         point.setId(id);
         return this.save(point, result, file);
     }

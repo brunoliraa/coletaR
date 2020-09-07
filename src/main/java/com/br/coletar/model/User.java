@@ -50,7 +50,7 @@ public class User implements UserDetails {
     @Email
     private String email;
     private String authorities;
-    private boolean enabled=false;
+    private boolean enabled = false;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @JsonIgnore
@@ -61,7 +61,6 @@ public class User implements UserDetails {
         Collection<GrantedAuthority> authorityListUser = AuthorityUtils.createAuthorityList("ROLE_USER");
         return authorityListUser;
     }
-
 
 
     @Override

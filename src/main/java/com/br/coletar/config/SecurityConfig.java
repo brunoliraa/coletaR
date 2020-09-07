@@ -30,14 +30,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/api/v1/points/**").hasRole("USER")
-                .antMatchers(HttpMethod.DELETE,"/api/v1/points/**").hasRole("USER")
-                .antMatchers(HttpMethod.PUT,"/api/v1/points/**").hasRole("USER")
-                .antMatchers(HttpMethod.PUT,"/api/v1/users/**").hasRole("USER")
-                .antMatchers(HttpMethod.DELETE,"/api/v1/users/**").hasRole("USER")
-                .antMatchers(HttpMethod.POST,"/api/v1/items/**").hasRole("USER")
-                .antMatchers(HttpMethod.DELETE,"/api/v1/items/**").hasRole("USER")
-                .antMatchers(HttpMethod.PUT,"/api/v1/items/**").hasRole("USER")
+                .antMatchers(HttpMethod.POST, "/api/v1/points/**").hasRole("USER")
+                .antMatchers(HttpMethod.DELETE, "/api/v1/points/**").hasRole("USER")
+                .antMatchers(HttpMethod.PUT, "/api/v1/points/**").hasRole("USER")
+                .antMatchers(HttpMethod.PUT, "/api/v1/users/**").hasRole("USER")
+                .antMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasRole("USER")
+                .antMatchers(HttpMethod.POST, "/api/v1/items/**").hasRole("USER")
+                .antMatchers(HttpMethod.DELETE, "/api/v1/items/**").hasRole("USER")
+                .antMatchers(HttpMethod.PUT, "/api/v1/items/**").hasRole("USER")
                 .antMatchers("/login")
                 .permitAll()
                 .anyRequest()
@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
