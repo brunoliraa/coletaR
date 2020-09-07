@@ -65,7 +65,7 @@ class ItemServiceTest {
         item.setName("teste");
         item.setImage("testeImage");
 
-        Item itemSaved = itemService.save(item, mockfile).getBody();
+        Item itemSaved = itemService.save(item, mockfile);
 
         Assertions.assertThat(itemSaved).isNotNull();
         Assertions.assertThat(itemSaved.getId()).isNotNull();
@@ -78,7 +78,7 @@ class ItemServiceTest {
 
         Item item = new Item(1L, "teste", "testeImage",null);
 
-        List<Item> itemList = itemService.findAll().getBody();
+        List<Item> itemList = itemService.findAll();
 
         Assertions.assertThat(itemList).isNotEmpty();
         Assertions.assertThat(itemList).isNotNull();
@@ -91,7 +91,7 @@ class ItemServiceTest {
 
         Long expectedId =new Item(1L, "teste", "testeImage",null).getId();
 
-        Item item = itemService.findById(1L).getBody();
+        Item item = itemService.findById(1L);
 
         Assertions.assertThat(item).isNotNull();
         Assertions.assertThat(item.getId()).isNotNull();
