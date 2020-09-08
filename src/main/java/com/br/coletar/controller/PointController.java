@@ -5,6 +5,7 @@ import com.br.coletar.dto.Response;
 import com.br.coletar.model.Point;
 import com.br.coletar.service.PointService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -27,29 +28,40 @@ public class PointController {
     public ResponseEntity<Response<Point>> save(@Valid PointRequest point, BindingResult result
             , @RequestParam(value = "file") MultipartFile file) {
 
-        return pointService.save(point, result, file);
+        Response<Point> pointResponse = pointService.save(point, result, file);
+        if (pointResponse.getErrors()!=null){
+            return new ResponseEntity<>(pointResponse,HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.ok(pointResponse);
     }
 
     @GetMapping
-    public ResponseEntity<List<Point>> findAll(@RequestParam(required = false) String city, @RequestParam(required = false) String state) {
-        return pointService.findAll(city, state);
+    public ResponseEntity<List<Point>> findAll() {
+        if(pointService.findAll().isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return ResponseEntity.ok(pointService.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Point> findById(@PathVariable Long id) {
-        return pointService.findById(id);
+        return ResponseEntity.ok(pointService.findById(id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePoint(@PathVariable Long id) {
-        return pointService.deletePoint(id);
+        pointService.deletePoint(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Response<Point>> updatePoint(@Valid PointRequest point, @PathVariable Long id
             , BindingResult result, @RequestParam("file") MultipartFile file) {
-
-        return pointService.updatePoint(id, point, result, file);
+        Response<Point> pointResponse = pointService.updatePoint(id, point, result, file);
+        if (pointResponse.getErrors()!=null){
+            return new ResponseEntity<>(pointResponse,HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(pointResponse,HttpStatus.NO_CONTENT);
     }
 
 }
