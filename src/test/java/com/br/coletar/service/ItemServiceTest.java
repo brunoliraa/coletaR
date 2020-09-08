@@ -1,5 +1,6 @@
 package com.br.coletar.service;
 
+import com.br.coletar.exception.ItemNotFoundException;
 import com.br.coletar.model.Item;
 import com.br.coletar.repository.ItemRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +39,7 @@ class ItemServiceTest {
     final MultipartFile mockfile= mock(MultipartFile.class);
 
     @BeforeEach
-    public void setUp() throws IOException {
+    public void setUp() {
         Item itemToSave = new Item();
         itemToSave.setImage("testeImage");
         itemToSave.setName("teste");
@@ -96,6 +97,18 @@ class ItemServiceTest {
         Assertions.assertThat(item).isNotNull();
         Assertions.assertThat(item.getId()).isNotNull();
         Assertions.assertThat(item.getId()).isEqualTo(expectedId);
+
+    }
+
+    @Test
+    @DisplayName("findById throws ItemNotFoundException when Item does not exist")
+    public void findById_throwsItemNotFoundException_WhenDoesNotExist(){
+
+        BDDMockito.when(itemRepositoryMock.findById(ArgumentMatchers.anyLong()))
+                .thenThrow(new ItemNotFoundException("item not founded"));
+
+        Assertions.assertThatExceptionOfType(ItemNotFoundException.class)
+                .isThrownBy(()-> itemService.findById(1L));
 
     }
 

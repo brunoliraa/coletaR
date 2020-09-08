@@ -52,8 +52,9 @@ class UserServiceTest {
         BDDMockito.when(userRepositoryMock.findById(ArgumentMatchers.anyLong()))
                 .thenReturn(Optional.ofNullable(UserCreator.createValdiUser()));
         BDDMockito.doNothing().when(userRepositoryMock).delete(ArgumentMatchers.any(User.class));
-        BDDMockito.when(mockService.criarTokenVerificacao(ArgumentMatchers.any(User.class)))
-                .thenReturn(ArgumentMatchers.anyString());
+
+//        BDDMockito.when(mockService.criarTokenVerificacao(ArgumentMatchers.any(User.class)))
+//                .thenReturn(ArgumentMatchers.anyString());
 
 
 //        String token =Mockito.spy(userService.criarTokenVerificacao(UserCreator.createUserToSave()));
@@ -127,8 +128,9 @@ class UserServiceTest {
     @DisplayName("delete throws UserNotFoundException when user does not Exist")
     public void delete_throwsUserNotFoundException_WhenUserDoesNotExist(){
 
-        BDDMockito.doThrow(new UserNotFoundException("user not found"))
-                .when(userRepositoryMock).delete(ArgumentMatchers.any(User.class));
+        BDDMockito.when(
+                userRepositoryMock.findById(ArgumentMatchers.anyLong()))
+                .thenThrow(new UserNotFoundException("pessoa nao encontrada"));
 
         Assertions.assertThatExceptionOfType(UserNotFoundException.class)
                 .isThrownBy(() ->userService.delete(2L));
