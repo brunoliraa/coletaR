@@ -1,5 +1,6 @@
 package com.br.coletar.integration;
 
+import com.br.coletar.exception.UserNotFoundException;
 import com.br.coletar.model.User;
 import com.br.coletar.repository.UserRepository;
 import com.br.coletar.util.UserCreator;
@@ -67,6 +68,18 @@ public class UserControllerIT {
         Assertions.assertThat(user).isNotNull();
         Assertions.assertThat(expectedId).isEqualTo(user.getId());
 
+    }
+
+    @Test
+    @DisplayName("findById returns 404 when user does not existt")
+    public void findById_returns_404_WhenUserDoesNotExist(){
+
+        BDDMockito.when(userRepositoryMock.findById(ArgumentMatchers.anyLong()))
+                .thenThrow(new UserNotFoundException("user not found"));
+
+        ResponseEntity<User> user = testRestTemplateRoleUser.getForEntity("/api/v1/users/1", User.class);
+
+        Assertions.assertThat(user.getStatusCode().value()).isEqualTo(404);
 
     }
 }
