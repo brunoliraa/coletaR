@@ -29,44 +29,44 @@ import java.util.Optional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserControllerIT {
-//
-//    @MockBean
-//    private UserRepository userRepositoryMock;
-//
-//    @LocalServerPort
-//    private int port;
-//    @Autowired
-//    private TestRestTemplate testRestTemplateRoleUser;
-//
-//    @Lazy
-//    @TestConfiguration
-//    static class Config {
-//        @Bean(name = "testRestTemplateRoleUser")
-//        public TestRestTemplate testRestTemplateRoleUserCreator(@Value("${local.server.port}") int port) {
-//            RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder()
-//                    .rootUri("http://localhost:" + port)
-//                    .basicAuthentication("user", "user");
-//            return new TestRestTemplate(restTemplateBuilder);
-//        }
-//    }
-//
-//    @BeforeEach
-//    public void setUp() {
-//
-//        BDDMockito.when(userRepositoryMock.findById(ArgumentMatchers.anyLong()))
-//                .thenReturn(Optional.ofNullable(UserCreator.createValdiUser()));
-//    }
-//
-//    @Test
-//    @DisplayName("returns a user when Success")
-//    public void returns_User_WhenSuccess(){
-//        Long expectedId = UserCreator.createValdiUser().getId();
-//
-//        User user = testRestTemplateRoleUser.getForObject("/api/v1/users/1", User.class);
-//
-//        Assertions.assertThat(user).isNotNull();
-//        Assertions.assertThat(expectedId).isEqualTo(user.getId());
-//
-//
-//    }
+
+    @MockBean
+    private UserRepository userRepositoryMock;
+
+    @LocalServerPort
+    private int port;
+    @Autowired
+    private TestRestTemplate testRestTemplateRoleUser;
+
+    @Lazy
+    @TestConfiguration
+    static class Config {
+        @Bean(name = "testRestTemplateRoleUser")
+        public TestRestTemplate testRestTemplateRoleUserCreator(@Value("${local.server.port}") int port) {
+            RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder()
+                    .rootUri("http://localhost:" + port)
+                    .basicAuthentication("user", "user");
+            return new TestRestTemplate(restTemplateBuilder);
+        }
+    }
+
+    @BeforeEach
+    public void setUp() {
+
+        BDDMockito.when(userRepositoryMock.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.ofNullable(UserCreator.createValdiUser()));
+    }
+
+    @Test
+    @DisplayName("findById returns a user when Success")
+    public void findById_returns_User_WhenSuccess(){
+        Long expectedId = UserCreator.createValdiUser().getId();
+
+        User user = testRestTemplateRoleUser.getForObject("/api/v1/users/1", User.class);
+
+        Assertions.assertThat(user).isNotNull();
+        Assertions.assertThat(expectedId).isEqualTo(user.getId());
+
+
+    }
 }
